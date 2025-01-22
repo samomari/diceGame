@@ -17,7 +17,12 @@ class FairRandomGenerator {
         hmac.update(message);
         const hash = hmac.digest();
 
-        const randomValue = hash.readUInt32BE(0);
+        let randomValue;
+        const max = 0xFFFFFFFF - (0xFFFFFFFF % range);
+
+        do {
+            randomValue = hash.readUInt32BE(0);
+        } while (randomValue >= max);
 
         const randomNumber = randomValue % range;
 
